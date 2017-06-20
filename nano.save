@@ -1,0 +1,11 @@
+<configuration>
+	<property>
+		<name>javax.jdo.option.ConnectionURL</name>
+	
+	<value>jdbc:mysql://localhost/metastore?createDatabaseIfNotExist=true</value>
+	</property>
+	<property>
+		<name>javax.jdo.option.ConnectionDriveName</name>
+		<value>com.mysql.jdbc.Driver</value>
+	</property>
+

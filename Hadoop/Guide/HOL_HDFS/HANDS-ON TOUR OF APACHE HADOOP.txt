@@ -1,0 +1,34 @@
+########## HANDS-ON TOUR OF APACHE HADOOP ##########
+
+Step 1 : Create input and ouput folder on dfs
+hdfs dfs -mkdir /inputs
+hdfs dfs -mkdir /outputs
+
+Step 2 : copy file to dfs
+hdfs dfs -copyFromLocal ~/sales_data_jan2009.csv /inputs/
+hdfs dfs -ls /inputs
+
+Step 3 : Read file content on dfs
+hdfs dfs -cat /inputs/sales_data_jan2009.csv
+
+Step 4 : Remove file on dfs
+hdfs dfs -rm /inputs/sales_data_jan2009.csv
+
+Step 5 Copy file to dfs (again)
+hdfs dfs -copyFromLocal ~/sales_data_jan2009.csv /inputs/sales_data_jan2009.csv
+hdfs dfs -ls /inputs/
+
+Step 6 : Review linux file system
+cd /var/hadoop_data/datanode/
+ls
+cd current/
+cd BP-2114074188-127.0.1.1-1474558767749/
+ls
+cd current/
+ls
+cd finalized/
+ls
+cd subdir0/
+ls
+cd subdir0/
+ls

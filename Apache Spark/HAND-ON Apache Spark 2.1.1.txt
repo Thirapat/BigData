@@ -1,0 +1,54 @@
+﻿########## HAND-ON Apache Spark ##########
+
+### Download Apache Spark 2.1.1 ###
+wget https://d3kbcqa49mib13.cloudfront.net/spark-2.1.1-bin-hadoop2.7.tgz
+#################################
+
+Step 1 : Extract spark zip
+cd
+tar –xvf spark-2.1.1-bin-hadoop2.7.tgz
+
+Step 2 : Move spark folder
+sudo mv spark-2.1.1-bin-hadoop2.7 /usr/local/spark
+
+Step 3 Set startup path
+sudo nano ~/.bashrc
+export SPARK_HOME=/usr/local/spark
+export PATH=$SPARK_HOME/bin:$PATH
+
+Step 4: Setup spark environment variable
+source ~/.bashrc
+cd /usr/local/spark/conf
+cp spark-env.sh.template spark-env.sh
+nano /usr/local/spark/conf/spark-env.sh
+HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop/
+
+Step 5 : Start all
+/usr/local/spark/sbin/start-all.sh
+
+Step 6 : Open browser on ubuntu
+URL: http://localhost:8080
+
+Step 7 : Test submit application to spark
+spark-submit --class org.apache.spark.examples.SparkPi --master spark://127.0.0.1:7077 --executor-memory 1G --total-executor-cores 1 /usr/local/spark/examples/jars/spark-examples_2.11-2.1.1.jar 10
+
+
+Step 8 : Test Core Spark RDD on HDFS Data
+hdfs dfs -copyFromLocal ~/sales_data_jan2009.csv /inputs/
+hdfs dfs -ls /inputs/
+
+Step 9 : Test Spark shell (My IP 10.0.0.4)
+spark-shell spark://10.0.0.4:7077/
+
+var hFile = sc.textFile("hdfs://10.0.0.4:9000/inputs/sales_data_jan2009.csv") 
+val wc = hFile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
+wc.take(10)
+wc.saveAsTextFile("hdfs://10.0.0.4:9000/outputs/spark_output_dir001")
+:q 
+
+Step 10 : Checking output on DFS
+hdfs dfs -ls /outputs/spark_output_dir001/
+hdfs dfs -ls /outputs/spark_output_dir001/
+
+Step 11 : Open browser
+http://localhost:50070

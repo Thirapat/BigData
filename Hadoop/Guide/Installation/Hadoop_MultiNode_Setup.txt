@@ -1,0 +1,65 @@
+########## Create Hadoop Cluster ##########
+#######At Master node#######
+
+Step 1 : Generate ssh
+ssh-keygen -t rsa -b 2048
+cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+
+Step 2 : Configuration master and slave ip in master node 
+nano /etc/hosts
+
+Step 2.1 : Type ip in file hosts
+##Example## ## In this case master node ip 10.0.0.5 ##
+10.0.0.6 ip-10-0-0-6
+10.0.0.5 ip-10-0-0-5
+10.0.0.4 ip-10-0-0-4
+
+Step 3 : Copy keygen.pub to slave
+scp /home/user01/.ssh/id_dsa.pub 10.0.0.5:/home/user01/.ssh/master.pub ==> Slave 1
+scp /home/ubuntu/.ssh/id_dsa.pub 10.0.0.6:/home/user01/.ssh/master.pub ==> Slave 2
+
+Step 4 : Add slave 1 and slave 2 to Hadoop slave file
+nano /usr/local/hadoop/etc/hadoop/slaves
+#example
+10.0.0.7
+10.0.0.6
+
+Step 5 : Edit hdfs-site.xml
+nano /usr/local/hadoop/etc/hadoop/hdfs-site.xml
+
+Step 5.1 : Change <value>1</value> to <value>2</value> for 2 slaves
+<configuration>
+  <property>
+    <name>dfs.replication</name>
+    <value>2</value>
+  </property>
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:/var/hadoop_data/namenode</value>
+  </property>
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:/var/hadoop_data/datanode</value>
+  </property>
+</configuration>
+##########################################
+
+#######At Slave node 2 nodes #######
+
+Step 6 : cat /home/user01/.ssh/master.pub >> /home/user01/.ssh/authorized_keys
+
+##########################################
+
+At all nodes: remove directories of namenode and datanode
+rm -rf /var/hadoop_data/namenode/*
+rm -rf /var/hadoop_data/datanode/*
+
+#######At Master node#######
+
+Step 7 : Format namenode
+hdfs namenode -format
+
+##########################################
+
+Step 8 : Execute start-dfs.sh
+start-dfs.sh

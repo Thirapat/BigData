@@ -1,0 +1,90 @@
+
+Prerequisite
+-Apache Hadoop server
+-File apache-flume-1.7.0-bin.tar.gz
+-Twitter Account for test 
+
+######Create Folder Flume twitter_data#########
+hdfs dfs -mkdir /input
+hdfs dfs -mkdir /input/twitter_data
+hdsf dfs -chmod g+w /input/twitter_data 
+
+#### Download Apache Flume###
+wget http://archive.apache.org/dist/flume/stable/apache-flume-1.7.0-bin.tar.gz
+
+########## Setup Apache Flume##########
+Step 1 : ## Extract zip and move folder ##
+cd
+tar -xvf apache-flume-1.7.0-bin.tar.gz
+
+Step 2 : ## Copy folder apache-flume-1.7.0 to usr/local/flume 
+sudo sudo cp -r apache-flume-1.7.0-bin /usr/local/flume
+
+Step 3 : ## Set startup path and configuration bash shell ##
+sudo nano ~/.bashrc
+
+Step 3.1 : Type this to bash shell 
+#flume
+export FLUME_HOME=/usr/local/flume/
+export FLUME_CLASSPATH=/usr/local/flume/conf
+export PATH=$PATH:$FLUME_HOME/bin
+export PATH=$PATH:$FLUME_HOME/sbin
+
+Step 3.2 : Restart bash shell
+source ~/.bashrc
+
+Step 4. Rename “flume-env.sh.template” to “flume-env.sh” 
+cd /usr/local/flume/conf
+sudo cp flume-env.sh.template flume-env.sh
+sudo cp flume-conf.properties.template Twitter.conf
+
+Step 4.1 : configuration file flume-env.sh
+sudo nano
+
+Step 4.1.1 : Type this to flume-env.sh
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+##export CLASSPATH=$CLASSPATH:/FLUME_HOME/lib/* 
+
+Step 5 : Create a file twitter.conf
+sudo nano twitter.conf
+# Naming the components on the current agent. 
+TwitterAgent.sources = Twitter 
+TwitterAgent.channels = MemChannel 
+TwitterAgent.sinks = HDFS
+  
+# Describing/Configuring the source 
+TwitterAgent.sources.Twitter.type = org.apache.flume.source.twitter.TwitterSource
+TwitterAgent.sources.Twitter.channels = MemChannel
+TwitterAgent.sources.Twitter.consumerKey = gdBqwYgX6i2RCltgf6i4dKSNx
+TwitterAgent.sources.Twitter.consumerSecret = SgQe6n4UHBQETkOpNwzpzxNlBJre9MVbIV0FBrqLuTOqX8OG8S
+TwitterAgent.sources.Twitter.accessToken = 69875664-IsqKWrkrTf13D0dbK1kXZhGWQIBNJbQgV0ra5Dy6q
+TwitterAgent.sources.Twitter.accessTokenSecret = 6Vqvclxvn8MdXax51hNHx5gVtnVHJPPSVyx8mztx8l7Zn
+TwitterAgent.sources.Twitter.keywords = hadoop, big data, analytics, bigdata, cloudera, data science, data scientist, business intelligence, mapreduce, data warehouse, data warehousing, mahout, hbase, nosql, newsql, businessintelligence, cloudcomputing
+ 
+  
+# Describing/Configuring the sink 
+TwitterAgent.sinks.HDFS.channel = MemChannel
+TwitterAgent.sinks.HDFS.type = hdfs
+TwitterAgent.sinks.HDFS.hdfs.path = hdfs://localhost:9000/user/Hadoop/twitter_data/
+TwitterAgent.sinks.HDFS.hdfs.fileType = DataStream
+TwitterAgent.sinks.HDFS.hdfs.writeFormat = Text
+TwitterAgent.sinks.HDFS.hdfs.batchSize = 1000
+TwitterAgent.sinks.HDFS.hdfs.rollSize = 0
+TwitterAgent.sinks.HDFS.hdfs.rollCount = 10000
+TwitterAgent.sinks.HDFS.hdfs.rollInterval = 600
+
+# Binding the source and sink to the channel 
+TwitterAgent.channels.MemChannel.type = memory
+TwitterAgent.channels.MemChannel.capacity = 10000
+TwitterAgent.channels.MemChannel.transactionCapacity = 100
+
+#############################################################
+
+Step 6: Start Flume agent:
+flume-ng agent --conf ./conf/ -f twitter.conf Dflume.root,console -n TwitterAgent
+
+
+
+
+
+

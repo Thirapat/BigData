@@ -1,5 +1,5 @@
-########## Ubuntu User ##########
 
+########## Ubuntu User ##########
 
 #######################
 #  username: user01   #
@@ -12,10 +12,16 @@ sudo adduser user01
 sudo usermod -aG sudo user01
 su user01
 
-## Download Apache Hadoop 
+Prerequisite
+1.Apache Hadoop 2.7.2 or 2.7.3 (set up complete)
+2.JDK 8
+
+
+###### Download Apache Hadoop ######
 wget http://apache.mirrors.tds.net/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.tar.gz
 
-##########################################
+###### Install JAVA ######
+sudo apt-get install openjdk-8-jdk
 
 ########## Setup Apache Hadoop 2.7.3 ##########
 Step 1 : ## extract zip and move folder ##
@@ -24,18 +30,23 @@ tar -xvf hadoop-2.7.3.tar.gz
 
 Step 2 : ## move folder hadoop-2.7.2 to usr/local/hadoop 
 sudo mv ./hadoop-2.7.3 /usr/local/hadoop
+sudo chown -R user01:user01 /usr/local/hadoop
 
 Step 3 : ## set startup path and configuration bash shell ##
 sudo nano ~/.bashrc
 
-Step 3.1 : Configuration bash shell 
+Step 3.1 : Configuration java path 
+#JAVA 
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export PATH=$PATH:$JAVA_HOME/bin
+
+Step 3.2 : Configuration hadoop PATH
+#Hadoop
 export HADOOP_HOME=/usr/local/hadoop
 export PATH=$PATH:$HADOOP_HOME/bin
 export PATH=$PATH:$HADOOP_HOME/sbin
 
-Step 3.2 : Restart bash shell
+Step 3.3 : Restart bash shell
 source ~/.bashrc
 
 Step 4 : Create hadoop log path 
@@ -47,13 +58,13 @@ Step 5.1
 cd /usr/local/hadoop/etc/hadoop
 
 Step 5.2
-nano hadoop-env.sh
+sudo nano hadoop-env.sh
 
 Step 5.3 : Configuration JAVA_HOME 
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 Step 6: Configuration yarn log path 
-nano yarn-env.sh
+sudo nano yarn-env.sh
 
 Step 6.1: Configuration YARN_LOG_DIR ## 
 YARN_LOG_DIR=/var/log/hadoop
@@ -63,7 +74,7 @@ ifconfig
 ## [My IP is 10.0.2.15] ## 
 
 Step 8: ## Configuration core-site.xml ##
-nano core-site.xml
+sudo nano core-site.xml
 
 Step 8.1 : Configuration in tag <configuration> </configuration> ##
 
@@ -80,7 +91,7 @@ sudo mkdir -p /var/hadoop_data/datanode
 sudo chown user01:user01 -R /var/hadoop_data
 
 Step 10 : Configuration hdfs-site.xml 
-nano hdfs-site.xml
+sudo nano hdfs-site.xml
 
 Step 10.1 : configuration in tag <configuration> </configuration> 
 
@@ -100,7 +111,7 @@ Step 10.1 : configuration in tag <configuration> </configuration>
 </configuration>
 
 Step 11 : Configuration yarn-site.xml 
-nano yarn-site.xml
+sudo nano yarn-site.xml
 
 Step 11.1 : Configuration in tag <configuration> </configuration> ##
 
@@ -141,7 +152,7 @@ Step 11.1 : Configuration in tag <configuration> </configuration> ##
 
 Step 12 : Configuration mapred-site.xml 
 cp mapred-site.xml.template mapred-site.xml
-nano mapred-site.xml
+sudo nano mapred-site.xml
 
 Step 12.1 configuration in tag <configuration> </configuration> 
 
@@ -164,5 +175,4 @@ start-yarn.sh
 jps
 
 Step 16 : ## Open Firefox browser on ubuntu ##
-
 URL: http://127.0.0.1:50070

@@ -1,0 +1,45 @@
+Step 1 : Download hive-serdes-1.0-SNAPSHOT.jar
+wget http://files.cloudera.com/samples/hive-serdes-1.0-SNAPSHOT.jar
+
+Step 2 : Copy hive-serdes-1.0-SNAPSHOT.jar to /usr/local/hive/lib/
+sudo cp hive-serdes-1.0-SNAPSHOT.jar /usr/local/hive/lib/
+
+Step 3 : Add file jar 
+At terminal type hive
+Step 3.1 ADD jar file 
+At Hive terminal 
+ADD JAR /usr/local/hive/lib/hive-serdes-1.0-SNAPSHOT.jar;
+
+Step 3.2 : Create table 
+SET hive.support.sql11.reserved.keywords=false;
+CREATE EXTERNAL TABLE base_tweets (
+   id BIGINT,
+   created_at STRING,
+   source STRING,
+   favorited BOOLEAN,
+   retweet_count INT,
+   retweeted_status STRUCT<
+      text:STRING,
+      user:STRUCT<screen_name:STRING,name:STRING>>,
+   entities STRUCT<
+      urls:ARRAY<STRUCT<expanded_url:STRING>>,
+      user_mentions:ARRAY<STRUCT<screen_name:STRING,name:STRING>>,
+      hashtags:ARRAY<STRUCT<text:STRING>>>,
+   text STRING,
+   user STRUCT<
+      screen_name:STRING,
+      name:STRING,
+      friends_count:INT,
+      followers_count:INT,
+      statuses_count:INT,
+      verified:BOOLEAN,
+      utc_offset:INT,
+      time_zone:STRING>,
+   in_reply_to_screen_name STRING
+)
+ROW FORMAT SERDE 'com.cloudera.hive.serde.JSONSerDe'
+LOCATION '/input/flume/twitter_data';
+
+Step 4 : test command 
+SELECT t.retweeted_screen_name, sum(retweets) AS total_retweets, count(*) AS tweet_count FROM (SELECT retweeted_status.user.screen_name as retweeted_screen_name, retweeted_status.text, max(retweet_count) as retweets FROM tweets GROUP BY retweeted_status.user.screen_name, retweeted_status.text) t GROUP BY t.retweeted_screen_name ORDER BY total_retweets DESC LIMIT 10;
+select user.screen_name, user.followers_count c from tweets order by c desc; 

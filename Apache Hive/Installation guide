@@ -45,7 +45,7 @@ sudo cp -r ./apache-hive-2.1.1-bin /usr/local/hive
 sudo chown -R user01:user01 /usr/local/hive/
 
 Step 4 : ## move folder mysql-connector-java-5.0.8-bin.jar to usr/local/hive/lib
-sudo cp mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar /usr/local/hive/lib/
+sudo cp mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar /usr/local/hive/lib
 
 Step 5: Create tmp folder
 sudo mkdir -p /var/hive/tmp
@@ -53,9 +53,10 @@ sudo chown user01:user01 -R /var/hive/tmp
 
 Step 6 : Create folder and grant proper write permissions to the user group in the HDFS folder
 hdfs dfs -mkdir /tmp
+hdfs dfs -mkdir /user/hive/
 hdfs dfs -mkdir /user/hive/warehouse
-hdsf dfs -chmod g+w /user/hive/warehouse
-hdsf dfs -chmod g+w /tmp
+hdfs dfs -chmod g+w /user/hive/warehouse
+hdfs dfs -chmod g+w /tmp
 
 Step 7 : Create the configuration file 
 cd /usr/local/hive/conf
@@ -63,7 +64,7 @@ sudo cp hive-default.xml.template hive-site.xml
 sudo cp hive-env.sh.template hive-env.sh
 
 Step 8 : Configuration file hive-env.sh
-nano hive-env.sh
+sudo nano hive-env.sh
 Step 8.1 Type this in file hive-env.sh
 
 #Set HADOOP_HOME to point to specific hadoop install directory
@@ -73,6 +74,8 @@ export HADOOP_HOME=/usr/local/hadoop
 export HIVE_CONF_DIR=/usr/local/hive/conf
 
 Step 9 : Configuration file hive-site.xml
+sudo nano hive-site.xml
+
 Configuration following parameters 
 javax.jdo.option.ConnectionURL                //the database URL 
 javax.jdo.option.ConnectionDriverName         //the JDBC driver name
@@ -80,7 +83,7 @@ javax.jdo.option.ConnectionUserName           //database username
 javax.jdo.option.ConnectionPassword           //database password
 hive.exec.local.scratchdir                    //hive temporary folder
 hive.downloaded.resources.dir                 //hive temporary folder
-    
+
 Step 9.1 : Configuration the database URL   
     <name>javax.jdo.option.ConnectionURL</name>
     <value>jdbc:mysql://localhost:3306/metastore_db?createDatabaseIfNotExist=true</value>
@@ -91,11 +94,11 @@ Step 9.2 : Configuration the JDBC driver name
 
 Step 9.3 : Configuration database username 
     <name>javax.jdo.option.ConnectionUserName</name>
-    <value>hive</value>
+    <value>App</value>
 
 Step 9.4 : Configuration database password 
      <name>javax.jdo.option.ConnectionPassword</name>
-    <value>password</value>
+    <value>Mine</value>
 
 Step 9.5 :Configuration hive temporary folder
  <name>hive.exec.local.scratchdir</name>

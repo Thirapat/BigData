@@ -52,8 +52,8 @@ Step 5 : Create a file twitter.conf
 
 sudo nano twitter.conf
 # Naming the components on the current agent. 
-TwitterAgent.sources = Twitter 
-TwitterAgent.channels = MemChannel 
+TwitterAgent.sources = Twitter
+TwitterAgent.channels = MemChannel
 TwitterAgent.sinks = HDFS
   
 # Describing/Configuring the source 

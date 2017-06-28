@@ -7,7 +7,7 @@ Prerequisite
 ######Create Folder Flume twitter_data#########
 hdfs dfs -mkdir /input
 hdfs dfs -mkdir /input/twitter_data
-hdsf dfs -chmod g+w /input/twitter_data 
+hdfs dfs -chmod g+w /input/twitter_data 
 
 #### Download Apache Flume###
 wget http://archive.apache.org/dist/flume/stable/apache-flume-1.7.0-bin.tar.gz
@@ -36,10 +36,9 @@ source ~/.bashrc
 Step 4. Rename “flume-env.sh.template” to “flume-env.sh” 
 cd /usr/local/flume/conf
 sudo cp flume-env.sh.template flume-env.sh
-sudo cp flume-conf.properties.template Twitter.conf
 
 Step 4.1 : configuration file flume-env.sh
-sudo nano
+sudo nano flume-env.sh
 
 Step 4.1.1 : Type this to flume-env.sh
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
@@ -70,7 +69,7 @@ TwitterAgent.sources.Twitter.keywords = hadoop, big data, analytics, bigdata, cl
 # Describing/Configuring the sink 
 TwitterAgent.sinks.HDFS.channel = MemChannel
 TwitterAgent.sinks.HDFS.type = hdfs
-TwitterAgent.sinks.HDFS.hdfs.path = hdfs://localhost:9000/user/Hadoop/twitter_data/
+TwitterAgent.sinks.HDFS.hdfs.path = hdfs://localhost:9000/input/twitter_data
 TwitterAgent.sinks.HDFS.hdfs.fileType = DataStream
 TwitterAgent.sinks.HDFS.hdfs.writeFormat = Text
 TwitterAgent.sinks.HDFS.hdfs.batchSize = 1000

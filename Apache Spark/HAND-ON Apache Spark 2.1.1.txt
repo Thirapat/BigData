@@ -13,11 +13,12 @@ sudo mv spark-2.2.0-bin-hadoop2.7 /usr/local/spark
 
 Step 3 Set startup path
 sudo nano ~/.bashrc
+#Spark
 export SPARK_HOME=/usr/local/spark
 export PATH=$SPARK_HOME/bin:$PATH
+source ~/.bashrc
 
 Step 4: Setup spark environment variable
-source ~/.bashrc
 cd /usr/local/spark/conf
 cp spark-env.sh.template spark-env.sh
 nano /usr/local/spark/conf/spark-env.sh

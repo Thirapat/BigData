@@ -40,17 +40,18 @@ Step 5.1 : Change <value>1</value> to <value>2</value> for 2 slaves
     <value>file:/var/hadoop_data/datanode</value>
   </property>
 </configuration>
+
+Step 6 : Add slave 1 and slave 2 to Hadoop slave file
+sudo vim /usr/local/hadoop/etc/hadoop/slaves
+#example
+10.0.0.7
+10.0.0.6
 ##########################################
 
 #######At Slave node 2 nodes #######
 
 Step 6 : cat /home/user01/.ssh/master.pub >> /home/user01/.ssh/authorized_keys
 
-Step 7 : Add slave 1 and slave 2 to Hadoop slave file
-sudo vim /usr/local/hadoop/etc/hadoop/slaves
-#example
-10.0.0.7
-10.0.0.6
 ##########################################
 
 ####### At all nodes #######

@@ -6,10 +6,10 @@ wget https://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.7.tgz
 
 Step 1 : Extract spark zip
 cd
-tar –xvf spark-2.1.1-bin-hadoop2.7.tgz
+tar –xvf spark-2.2.0-bin-hadoop2.7.tgz
 
 Step 2 : Move spark folder
-sudo mv spark-2.1.1-bin-hadoop2.7 /usr/local/spark
+sudo mv spark-2.2.0-bin-hadoop2.7 /usr/local/spark
 
 Step 3 Set startup path
 sudo nano ~/.bashrc

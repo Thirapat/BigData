@@ -1,7 +1,7 @@
 ﻿########## HAND-ON Apache Spark ##########
 
 ### Download Apache Spark 2.1.1 ###
-wget https://d3kbcqa49mib13.cloudfront.net/spark-2.1.1-bin-hadoop2.7.tgz
+wget https://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.7.tgz
 #################################
 
 Step 1 : Extract spark zip

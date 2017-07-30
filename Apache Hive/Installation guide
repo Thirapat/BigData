@@ -5,7 +5,7 @@ Prerequisite
 4.Mysql-connector-java-5.0.8 or above
 
 ## Download Apache Hive ##
-wget http://apache.claz.org/hive/hive-2.1.1/apache-hive-2.1.1-bin.tar.gz
+wget http://apache.claz.org/hive/hive-2.1.1/apache-hive-2.2.0-bin.tar.gz
 
 ## Download mysql-connector-java-5.0.8 ##
 wget https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-5.0.8.tar.gz
@@ -26,8 +26,8 @@ FLUSH PRIVILEGES;
 ########## Setup Apache Hive 2.1.1 ##########
 Step 1 : ## extract zip and move folder ##
 cd
-tar -xvf apache-hive-2.1.1-bin.tar.gz
-tar -xvf mysql-connector-java-5.0.8-bin.tar.gz 
+tar -xvf apache-hive-2.2.0-bin.tar.gz
+tar -xvf mysql-connector-java-5.0.8.tar.gz
 
 Step 2 : ## set startup path and configuration bash shell ##
 sudo nano ~/.bashrc
@@ -41,7 +41,7 @@ Step 2.2 : Restart bash shell
 source ~/.bashrc
 
 Step 3 : ## move folder apache-hive-2.1.1-bin to usr/local/hive
-sudo cp -r ./apache-hive-2.1.1-bin /usr/local/hive
+sudo cp -r ./apache-hive-2.2.0-bin /usr/local/hive
 sudo chown -R user01:user01 /usr/local/hive/
 
 Step 4 : ## move folder mysql-connector-java-5.0.8-bin.jar to usr/local/hive/lib
@@ -53,6 +53,7 @@ sudo chown user01:user01 -R /var/hive/tmp
 
 Step 6 : Create folder and grant proper write permissions to the user group in the HDFS folder
 hdfs dfs -mkdir /tmp
+hdfs dfs -mkdir /user
 hdfs dfs -mkdir /user/hive/
 hdfs dfs -mkdir /user/hive/warehouse
 hdfs dfs -chmod g+w /user/hive/warehouse
@@ -98,7 +99,7 @@ Step 9.3 : Configuration database username
 
 Step 9.4 : Configuration database password 
      <name>javax.jdo.option.ConnectionPassword</name>
-    <value>Mine</value>
+    <value>mine</value>
 
 Step 9.5 :Configuration hive temporary folder
  <name>hive.exec.local.scratchdir</name>

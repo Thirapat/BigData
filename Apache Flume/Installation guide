@@ -9,8 +9,9 @@ hdfs dfs -mkdir /input
 hdfs dfs -mkdir /input/twitter_data
 hdfs dfs -chmod g+w /input/twitter_data 
 
-#### Download Apache Flume###
+#### Download Apache Flume and pre config file ###
 wget http://archive.apache.org/dist/flume/stable/apache-flume-1.7.0-bin.tar.gz
+wget http://files.cloudera.com/samples/flume-sources-1.0-SNAPSHOT.jar
 
 ########## Setup Apache Flume##########
 Step 1 : ## Extract zip and move folder ##

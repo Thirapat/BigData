@@ -7,10 +7,6 @@ Prerequisite
 ## Download Apache Hive ##
 wget http://apache.claz.org/hive/hive-2.1.1/apache-hive-2.2.0-bin.tar.gz
 
-## Download mysql-connector-java-5.0.8 ##
-wget https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-5.0.8.tar.gz
-
-
 ########## Setup Mysql server ##########
 Step 1 : Install MySQL on Ubuntu
 sudo apt-get update
@@ -22,6 +18,10 @@ CREATE database metastore_db;
 CREATE USER 'APP'@'localhost' IDENTIFIED BY 'mine';
 GRANT ALL PRIVILEGES ON * . * TO 'APP'@'localhost';
 FLUSH PRIVILEGES;
+
+Step : Installing the MySQL JDBC Driver
+sudo apt-get install libmysql-java
+sudo ln -s /usr/share/java/mysql-connector-java.jar /usr/local/hive/lib/mysql-connector-java.jar
 
 ########## Setup Apache Hive 2.1.1 ##########
 Step 1 : ## extract zip and move folder ##
@@ -110,7 +110,7 @@ Step 9.6 :Configuration hive temporary folder
     <value>/var/hive/tmp/${hive.session.id}_resources</value>
 step9.7 : Configuration URI for the remote metastore
   <name>hive.metastore.uris</name>
-  <value>thrift://<n.n.n.n>:9083</value>
+  <value>thrift://<n.n.n.n>:9083</value> //<n.n.n.n> is your ip
 
    
 Step 10 : Set default database type

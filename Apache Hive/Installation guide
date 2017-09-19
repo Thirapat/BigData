@@ -95,7 +95,7 @@ Step 9.2 : Configuration the JDBC driver name
 
 Step 9.3 : Configuration database username 
     <name>javax.jdo.option.ConnectionUserName</name>
-    <value>App</value>
+    <value>APP</value>
 
 Step 9.4 : Configuration database password 
      <name>javax.jdo.option.ConnectionPassword</name>
@@ -108,9 +108,11 @@ Step 9.5 :Configuration hive temporary folder
 Step 9.6 :Configuration hive temporary folder
     <name>hive.downloaded.resources.dir</name>        
     <value>/var/hive/tmp/${hive.session.id}_resources</value>
+    
 step9.7 : Configuration URI for the remote metastore
   <name>hive.metastore.uris</name>
   <value>thrift://<n.n.n.n>:9083</value> //<n.n.n.n> is your ip
+  
 step9.8 Configuration Hive's Table Lock Manager
   <name>hive.support.concurrency</name>
   <description>Enable Hive's Table Lock Manager Service</description>

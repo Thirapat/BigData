@@ -14,7 +14,7 @@ sudo apt-get install mysql-server
 
 Step 2: Create a New User and Grant Permissions in MySQL
 mysql -u root -p
-CREATE database metastore_db;
+CREATE database metastore;
 CREATE USER 'APP'@'localhost' IDENTIFIED BY 'mine';
 GRANT ALL PRIVILEGES ON * . * TO 'APP'@'localhost';
 FLUSH PRIVILEGES;
@@ -74,6 +74,9 @@ export HADOOP_HOME=/usr/local/hadoop
 #Hive Configuration Directory can be acccssed at:
 export HIVE_CONF_DIR=/usr/local/hive/conf
 
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
 Step 9 : Configuration file hive-site.xml
 sudo nano hive-site.xml
 
@@ -87,7 +90,7 @@ hive.downloaded.resources.dir                 //hive temporary folder
 
 Step 9.1 : Configuration the database URL   
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://localhost:3306/metastore_db?createDatabaseIfNotExist=true</value>
+    <value>jdbc:mysql://localhost:3306/metastore?createDatabaseIfNotExist=true</value>
 
 Step 9.2 : Configuration the JDBC driver name
     <name>javax.jdo.option.ConnectionDriverName</name>
@@ -113,11 +116,22 @@ step9.7 : Configuration URI for the remote metastore
   <name>hive.metastore.uris</name>
   <value>thrift://<n.n.n.n>:9083</value> //<n.n.n.n> is your ip
   
-step9.8 Configuration Hive's Table Lock Manager
-  <name>hive.support.concurrency</name>
-  <description>Enable Hive's Table Lock Manager Service</description>
-  <value>true</value>
-</property>
+step9.8 Configuration Hive's metastore
+  <property>
+    <name>hive.metastore.warehouse.dir</name>
+    <value>hdfs://10.0.0.7:9000/user/hive/warehouse</value>
+    <description>location of default database for the warehouse</description>
+  </property>
+  
+ step9.9 Configuration HiveServer2 execute
+   <property>
+    <name>hive.server2.enable.doAs</name>
+    <value>false</value>
+    <description>
+      Setting this property to true will have HiveServer2 execute
+      Hive operations as the user making the calls to it.
+    </description>
+  </property>
    
 Step 10 : Set default database type
 schematool -initSchema -dbType mysql

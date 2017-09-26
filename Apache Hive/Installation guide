@@ -5,53 +5,25 @@ Prerequisite
 4.Mysql-connector-java-5.0.8 or above
 
 ## Download Apache Hive ##
-wget http://apache.claz.org/hive/hive-2.1.1/apache-hive-2.2.0-bin.tar.gz
+wget http://apache.claz.org/hive/hive-2.1.1/apache-hive-2.1.1-bin.tar.gz
 
 ########## Setup Mysql server ##########
 Step 1 : Install MySQL on Ubuntu
 sudo apt-get update
 sudo apt-get install mysql-server
 
-Step 2: Create a New User and Grant Permissions in MySQL
+Step 2 : Create a New User and Grant Permissions in MySQL
 mysql -u root -p
 CREATE database metastore;
 CREATE USER 'APP'@'localhost' IDENTIFIED BY 'mine';
 GRANT ALL PRIVILEGES ON * . * TO 'APP'@'localhost';
 FLUSH PRIVILEGES;
 
-Step : Installing the MySQL JDBC Driver
+Step 3 : Installing the MySQL JDBC Driver
 sudo apt-get install libmysql-java
 sudo ln -s /usr/share/java/mysql-connector-java.jar /usr/local/hive/lib/mysql-connector-java.jar
 
-########## Setup Apache Hive 2.1.1 ##########
-Step 1 : ## extract zip and move folder ##
-cd
-tar -xvf apache-hive-2.2.0-bin.tar.gz
-tar -xvf mysql-connector-java-5.0.8.tar.gz
-
-Step 2 : ## set startup path and configuration bash shell ##
-sudo nano ~/.bashrc
-
-Step 2.1 Type this in bash shell
-#Hive 
-export HIVE_HOME=/usr/local/hive
-export PATH=$PATH:/usr/local/hive/bin
-
-Step 2.2 : Restart bash shell
-source ~/.bashrc
-
-Step 3 : ## move folder apache-hive-2.1.1-bin to usr/local/hive
-sudo cp -r ./apache-hive-2.2.0-bin /usr/local/hive
-sudo chown -R user01:user01 /usr/local/hive/
-
-Step 4 : ## move folder mysql-connector-java-5.0.8-bin.jar to usr/local/hive/lib
-sudo cp mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar /usr/local/hive/lib
-
-Step 5: Create tmp folder
-sudo mkdir -p /var/hive/tmp
-sudo chown user01:user01 -R /var/hive/tmp
-
-Step 6 : Create folder and grant proper write permissions to the user group in the HDFS folder
+Step 4 : Create folder and grant proper write permissions to the user group in the HDFS folder
 hdfs dfs -mkdir /tmp
 hdfs dfs -mkdir /user
 hdfs dfs -mkdir /user/hive/
@@ -59,14 +31,49 @@ hdfs dfs -mkdir /user/hive/warehouse
 hdfs dfs -chmod g+w /user/hive/warehouse
 hdfs dfs -chmod g+w /tmp
 
-Step 7 : Create the configuration file 
+########## Setup Apache Hive 2.1.1 ##########
+
+Step 1 : Extract zip and move folder ##
+cd
+tar -xvf apache-hive-2.1.0-bin.tar.gz
+tar -xvf mysql-connector-java-5.0.8.tar.gz
+
+Step 2 : Set startup path and configuration bash shell ##
+sudo nano ~/.bashrc
+
+Step 2.1 Set up hive path bash shell
+#Hive 
+export HIVE_HOME=/usr/local/hive
+export PATH=$PATH:/usr/local/hive/bin
+
+Step 2.2 : Restart bash shell
+source ~/.bashrc
+
+Step 3 : Move folder apache-hive-2.1.1-bin to usr/local/hive
+sudo cp -r ./apache-hive-2.1.0-bin /usr/local/hive
+sudo chown -R user01:user01 /usr/local/hive/
+
+Step 4 : Move folder mysql-connector-java-5.0.8-bin.jar to usr/local/hive/lib
+sudo cp mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar /usr/local/hive/lib
+
+Step 5 : Move hive-jdbc-2.1.1-standalone.jar to /usr/local/hive/lib
+sudo cp /usr/local/hive/jdbc/hive-jdbc-2.1.1-standalone.jar /usr/local/hive/lib/
+
+Step 6 : Set default database type
+schematool -initSchema -dbType mysql
+
+Step 7 : Create tmp folder
+sudo mkdir -p /var/hive/tmp
+sudo chown user01:user01 -R /var/hive/tmp
+
+Step 8 : Create the configuration file 
 cd /usr/local/hive/conf
 sudo cp hive-default.xml.template hive-site.xml
 sudo cp hive-env.sh.template hive-env.sh
 
-Step 8 : Configuration file hive-env.sh
+Step 9 : Configuration file hive-env.sh
 sudo nano hive-env.sh
-Step 8.1 Type this in file hive-env.sh
+Step 9.1 Type this in file hive-env.sh
 
 #Set HADOOP_HOME to point to specific hadoop install directory
 export HADOOP_HOME=/usr/local/hadoop
@@ -77,7 +84,7 @@ export HIVE_CONF_DIR=/usr/local/hive/conf
 #JAVA
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-Step 9 : Configuration file hive-site.xml
+Step 10 : Configuration file hive-site.xml
 sudo nano hive-site.xml
 
 Configuration following parameters 
@@ -114,12 +121,12 @@ Step 9.6 :Configuration hive temporary folder
     
 step9.7 : Configuration URI for the remote metastore
   <name>hive.metastore.uris</name>
-  <value>thrift://<n.n.n.n>:9083</value> //<n.n.n.n> is your ip
+  <value>thrift://localhost:9083</value> //<n.n.n.n> is your ip
   
 step9.8 Configuration Hive's metastore
   <property>
     <name>hive.metastore.warehouse.dir</name>
-    <value>hdfs://10.0.0.7:9000/user/hive/warehouse</value>
+    <value>hdfs://localhost:9000/user/hive/warehouse</value>
     <description>location of default database for the warehouse</description>
   </property>
   
@@ -132,12 +139,15 @@ step9.8 Configuration Hive's metastore
       Hive operations as the user making the calls to it.
     </description>
   </property>
-   
-Step 10 : Set default database type
-schematool -initSchema -dbType mysql
-
-Step 11 : Start hive 
-hive
+  
+Step 10 : Start hive 
+Step 10.1 : Start Hive metastore
+    hive --service metastore &
+Step 10.2 : Start Hive Server 
+    hive --service hiveserver2 &
+Step 11 : login beeline server
+beeline
+!connect jdbc:hive2://localhost:10000
 
 
 

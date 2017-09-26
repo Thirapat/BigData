@@ -20,8 +20,9 @@ GRANT ALL PRIVILEGES ON * . * TO 'APP'@'localhost';
 FLUSH PRIVILEGES;
 
 Step 3 : Installing the MySQL JDBC Driver
-sudo apt-get install libmysql-java
-sudo ln -s /usr/share/java/mysql-connector-java.jar /usr/local/hive/lib/mysql-connector-java.jar
+wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.44.tar.gz
+tar -xvf mysql-connector-java-5.1.44.tar.gz
+sudo cp /home/user01/mysql-connector-java-5.1.44/mysql-connector-java-5.1.44-bin.jar /usr/local/hive/lib/
 
 Step 4 : Create folder and grant proper write permissions to the user group in the HDFS folder
 hdfs dfs -mkdir /tmp

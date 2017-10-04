@@ -1,0 +1,23 @@
+Step 1 : # Install dependencies for the tidyverse and other packages
+sudo apt-get install libxml2-dev libssl-dev libcurl4-gnutls-dev gfortran
+
+Step 2 : # add CRAN to apt sources
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+printf '\n#CRAN mirror\ndeb https://cran.dcc.uchile.cl/bin/linux/ubuntu xenial/\n' | sudo tee -a /etc/apt/sources.list
+
+Step 3 : # install R
+sudo apt-get update
+sudo apt-get install r-base
+sudo apt-get install r-base-dev
+
+Step 4 : # install common packages
+R --vanilla << EOF
+install.packages(c("tidyverse","data.table","dtplyr","knitr","devtools"), repos = "https://cran.rstudio.com/")
+q()
+EOF
+
+Step 5 : # install Rstudio
+wget https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-xenial-1.1.379-amd64.deb
+sudo apt-get install gdebi
+sudo gdebi rstudio-xenial-1.1.379-amd64.deb
+
